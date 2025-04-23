@@ -1,0 +1,19 @@
+db.employees.insertMany([
+    {
+        email:"test3@gmail.com",
+        department:"test",
+    },
+    {
+        email:"test4@gmail.com",
+        department:"test",
+    },
+    {
+        email:"test5@gmail.com",
+        department:"test",
+    }
+]
+);
+
+db.employees.deleteMany(
+    {department:"test"}
+);
