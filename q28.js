@@ -1,0 +1,28 @@
+db.students.insertOne({
+    studentName:"John"
+})
+db.subjects.insertOne({
+    subjectName:"Maths"
+})
+db.marks.insertOne({
+    studentId:ObjectId('6808af393d07cc82bfb5f8a6'),
+    subjectId:ObjectId('6808af413d07cc82bfb5f8a7'),
+    score:95,
+})
+//db.marks.find({},{studentName:1,subjectName:1,_id:0,score:1})
+
+db.marks.aggregate([
+    {$lookup:{from:"subjects",localField:"subjectId",foreignField:"_id",as:"subjects"}},
+    {$unwind:"$subjects"},
+    {$lookup:{from:"students",localField:"studentId",foreignField:"_id",as:"students"}},
+    {$unwind:"$students"},
+    {$project:{"students.studentName":1,"subjects.subjectName":1,"score":1,"_id":0}}
+])
+db.createView("marksView","marks",[
+    {$lookup:{from:"subjects",localField:"subjectId",foreignField:"_id",as:"subjects"}},
+    {$unwind:"$subjects"},
+    {$lookup:{from:"students",localField:"studentId",foreignField:"_id",as:"students"}},
+    {$unwind:"$students"},
+    {$project:{"students.studentName":1,"subjects.subjectName":1,"score":1,"_id":0}}
+])
+db.marksView.find()
